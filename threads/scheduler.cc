@@ -91,19 +91,23 @@ Scheduler::ReadyToRun (Thread *thread)
     // readyList->Append(thread);
     if (thread->GetPriority() >= 100) {
         L1ReadyQueue->Insert(thread);
+        DEBUG(dbgThread, "[InsertToQueue] Tick [" << stats->totalTicks << "]: Thread [" 
+          << thread->getID() << "] is inserted into queue L1 ready queue");
+
         Thread *currentThread = kernel->currentThread;
         if (currentThread->GetRemainingBurstTime() < thread->GetRemainingBurstTime())
             kernel->currentThread->Yield();
 
     } else if (thread->GetPriority() >= 50) {
         L2ReadyQueue->Insert(thread);
+        DEBUG(dbgThread, "[InsertToQueue] Tick [" << stats->totalTicks << "]: Thread [" 
+          << thread->getID() << "] is inserted into queue L2 ready queue");
     } else {
         L3ReadyQueue->Append(thread);
+        DEBUG(dbgThread, "[InsertToQueue] Tick [" << stats->totalTicks << "]: Thread [" 
+          << thread->getID() << "] is inserted into queue L3 ready queue");
     }
 
-    // DEBUG('z', "[InsertToQueue] Tick [" << stats->totalTicks << "]: Thread [" 
-    //       << thread->getID() << "] is inserted into queue L[" 
-    //       << thread->GetQueueLevel() << "]");
 }
 
 //----------------------------------------------------------------------
@@ -290,7 +294,7 @@ Scheduler::UpdatePriority()
         if (thread->GetWaitTime() > AGING_THRESHOLD) {
             int oldPriority = thread->GetPriority();
             thread->SetPriority(oldPriority + 10);
-            DEBUG('z', "[UpdatePriority] Tick [" << kernel->stats->totalTicks << "]: Thread ["
+            DEBUG(dbgThread, "[UpdatePriority] Tick [" << kernel->stats->totalTicks << "]: Thread ["
                 << thread->getID() << "] changes its priority from ["
                 << oldPriority << "] to [" << thread->GetPriority() << "]");
         }
@@ -310,7 +314,7 @@ Scheduler::UpdatePriority()
                 ReadyToRun(thread);
             }
             
-            DEBUG('z', "[UpdatePriority] Tick [" << kernel->stats->totalTicks << "]: Thread ["
+            DEBUG(dbgThread, "[UpdatePriority] Tick [" << kernel->stats->totalTicks << "]: Thread ["
                 << thread->getID() << "] changes its priority from ["
                 << oldPriority << "] to [" << thread->GetPriority() << "]");
         }
@@ -329,7 +333,7 @@ Scheduler::UpdatePriority()
                 L3ReadyQueue->Remove(thread);
                 ReadyToRun(thread);
             }
-            DEBUG('z', "[UpdatePriority] Tick [" << kernel->stats->totalTicks << "]: Thread ["
+            DEBUG(dbgThread, "[UpdatePriority] Tick [" << kernel->stats->totalTicks << "]: Thread ["
                 << thread->getID() << "] changes its priority from ["
                 << oldPriority << "] to [" << thread->GetPriority() << "]");
         }
