@@ -23,9 +23,6 @@ enum SchedulerType {
         Priority
 };
 
-static int L1Comparison(Thread *a, Thread *b);
-static int L2Comparison(Thread *a, Thread *b);
-
 class Scheduler {
   public:
 	Scheduler();		// Initialize list of ready threads 

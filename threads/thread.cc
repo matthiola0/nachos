@@ -221,7 +221,10 @@ Thread::Yield ()
     RemainingBurstTime -= kernel->stats->userTicks;
 
     nextThread = kernel->scheduler->FindNextToRun();
-    if (nextThread != NULL) {
+    if (nextThread == this) {
+        this->setStatus(RUNNING);
+    }
+    else if (nextThread != NULL ) {
         kernel->scheduler->ReadyToRun(this);
         kernel->scheduler->Run(nextThread, false);
     }

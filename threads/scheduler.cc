@@ -37,6 +37,8 @@
 // Declare sorting rule of SortedList for L1 & L2 ReadyQueue
 // Hint: Funtion Type should be "static int"
 //<TODO>
+static int L1Comparison(Thread *a, Thread *b);
+static int L2Comparison(Thread *a, Thread *b);
 
 Scheduler::Scheduler()
 {
@@ -294,6 +296,7 @@ Scheduler::UpdatePriority()
         if (thread->GetWaitTime() > AGING_THRESHOLD) {
             int oldPriority = thread->GetPriority();
             thread->SetPriority(oldPriority + 10);
+            
             DEBUG(dbgThread, "[UpdatePriority] Tick [" << kernel->stats->totalTicks << "]: Thread ["
                 << thread->getID() << "] changes its priority from ["
                 << oldPriority << "] to [" << thread->GetPriority() << "]");
@@ -311,12 +314,13 @@ Scheduler::UpdatePriority()
             thread->SetPriority(oldPriority + 10);
             if (thread->GetPriority() >= 100) {
                 L2ReadyQueue->Remove(thread);
+
+                DEBUG(dbgThread, "[UpdatePriority] Tick [" << kernel->stats->totalTicks << "]: Thread ["
+                    << thread->getID() << "] changes its priority from ["
+                    << oldPriority << "] to [" << thread->GetPriority() << "]");
+
                 ReadyToRun(thread);
             }
-            
-            DEBUG(dbgThread, "[UpdatePriority] Tick [" << kernel->stats->totalTicks << "]: Thread ["
-                << thread->getID() << "] changes its priority from ["
-                << oldPriority << "] to [" << thread->GetPriority() << "]");
         }
     }
     delete iter;
@@ -331,11 +335,13 @@ Scheduler::UpdatePriority()
             thread->SetPriority(oldPriority + 10);
             if (thread->GetPriority() >= 50) {
                 L3ReadyQueue->Remove(thread);
+
+                DEBUG(dbgThread, "[UpdatePriority] Tick [" << kernel->stats->totalTicks << "]: Thread ["
+                    << thread->getID() << "] changes its priority from ["
+                    << oldPriority << "] to [" << thread->GetPriority() << "]");
+
                 ReadyToRun(thread);
             }
-            DEBUG(dbgThread, "[UpdatePriority] Tick [" << kernel->stats->totalTicks << "]: Thread ["
-                << thread->getID() << "] changes its priority from ["
-                << oldPriority << "] to [" << thread->GetPriority() << "]");
         }
     }
     delete iter;
