@@ -221,10 +221,7 @@ Thread::Yield ()
     RemainingBurstTime -= kernel->stats->userTicks;
 
     nextThread = kernel->scheduler->FindNextToRun();
-    if (nextThread == this) {
-        this->setStatus(RUNNING);
-    }
-    else if (nextThread != NULL ) {
+    if (nextThread != NULL ) {
         kernel->scheduler->ReadyToRun(this);
         kernel->scheduler->Run(nextThread, false);
     }
@@ -273,8 +270,10 @@ Thread::Sleep (bool finishing)
     // , and determine finishing on Scheduler::Run(nextThread, finishing), not here.
     // 1. Update RemainingBurstTime
     // 2. Reset some value of current_thread, then context switch
-    RemainingBurstTime -= kernel->stats->userTicks;
-    kernel->scheduler->Run(nextThread, finishing);
+    if (nextThread != this) {
+        RemainingBurstTime -= kernel->stats->userTicks;
+        kernel->scheduler->Run(nextThread, finishing);
+    }
     //<TODO>
 }
 
