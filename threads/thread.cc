@@ -270,10 +270,8 @@ Thread::Sleep (bool finishing)
     // , and determine finishing on Scheduler::Run(nextThread, finishing), not here.
     // 1. Update RemainingBurstTime
     // 2. Reset some value of current_thread, then context switch
-    if (nextThread != this) {
-        RemainingBurstTime -= kernel->stats->userTicks;
-        kernel->scheduler->Run(nextThread, finishing);
-    }
+    RemainingBurstTime -= kernel->stats->userTicks;
+    kernel->scheduler->Run(nextThread, finishing);
     //<TODO>
 }
 
