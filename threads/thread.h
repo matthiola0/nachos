@@ -121,16 +121,16 @@ class Thread {
     // 6. set/get RRTime
     //<TODO>
     int getID() { return ID;}
-    void SetPriority(int priority) { Priority = priority; }
-    int GetPriority() { return Priority; }
-    void SetWaitTime(int waittime) { WaitTime = waittime; }
-    int GetWaitTime() { return  WaitTime; }
-    void SetRemainingBurstTime(int remainingbursttime) { RemainingBurstTime = remainingbursttime; }
-    int GetRemainingBurstTime() { return RemainingBurstTime; }
-    void SetRunTime(int runtime) { RunTime = runtime; }
-    int GetRunTime() { return RunTime; }
-    void SetRRTime(int rrtime) { RRTime = rrtime; }
-    int GetRRTime() {return RRTime; }
+    void setPriority(int priority) { Priority = priority; }
+    int getPriority() { return Priority; }
+    void setWaitTime(int waittime) { WaitTime = waittime; }
+    int getWaitTime() { return  WaitTime; }
+    void setRemainingBurstTime(int remainingbursttime) { RemainingBurstTime = remainingbursttime; }
+    int getRemainingBurstTime() { return RemainingBurstTime; }
+    void setRunTime(int runtime) { RunTime = runtime; }
+    int getRunTime() { return RunTime; }
+    void setRRTime(int rrtime) { RRTime = rrtime; }
+    int getRRTime() {return RRTime; }
 
   private:
     // some of the private data for this class is listed above

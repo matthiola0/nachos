@@ -218,12 +218,23 @@ Thread::Yield ()
     // 2. Then, find next thread from ready state to push on running state
     // 3. After resetting some value of current_thread, then context switch
     this->setStatus(READY);
+    int oldRemainingBurstTime = RemainingBurstTime;
     RemainingBurstTime -= kernel->stats->userTicks;
+    if (RemainingBurstTime < 0) {
+        RemainingBurstTime = 0;
+    }
+    DEBUG('z', "[UpdateRemainingBurstTime] Tick [" << kernel->stats->totalTicks 
+          << "]: Thread [" << getID() 
+          << "] update remaining burst time, from: [" << oldRemainingBurstTime
+          << "] to [" << RemainingBurstTime << "]");
 
     nextThread = kernel->scheduler->FindNextToRun();
     if (nextThread != NULL ) {
         kernel->scheduler->ReadyToRun(this);
-        kernel->scheduler->Run(nextThread, false);
+        if (RemainingBurstTime > 0) 
+            kernel->scheduler->Run(nextThread, false);
+        else
+            kernel->scheduler->Run(nextThread, true);
     }
 
     //<TODO>
@@ -270,8 +281,16 @@ Thread::Sleep (bool finishing)
     // , and determine finishing on Scheduler::Run(nextThread, finishing), not here.
     // 1. Update RemainingBurstTime
     // 2. Reset some value of current_thread, then context switch
-    RemainingBurstTime -= kernel->stats->userTicks;
-    kernel->scheduler->Run(nextThread, finishing);
+    if(nextThread != this){
+        int RRTime = this->getRRTime();
+        if(RRTime !=0){
+            int old = this->getRemainingBurstTime();
+            this->setRemainingBurstTime(old - RRTime);
+            DEBUG('z', "[UpdateRemainingBurstTime] Tick [" << kernel->stats->totalTicks << "]: Thread [" << this->getID() << "] update remaining burst time, from: [" << old << "] - [" << RRTime << "], to [" << old << "]");
+            this->setRRTime(0);
+        }
+        DEBUG('z',"[ContextSwitch] Tick [" << kernel->stats->totalTicks << "]: Thread [" << nextThread->getID() << "] is now selected for execution, thread [" << this->getID() << "] is replaced, and it has executed [" << this->getRunTime() << "] ticks");
+        kernel->scheduler->Run(nextThread, finishing);
     //<TODO>
 }
 

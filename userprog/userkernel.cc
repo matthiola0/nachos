@@ -193,11 +193,11 @@ UserProgKernel::InitializeOneThread(char* name, int priority, int burst_time)
     // While creating a new thread, thread should be initialized, and then forked.
     t[threadNum] = new Thread(name, threadNum);
     t[threadNum]->space = new AddrSpace();
-    t[threadNum]->SetPriority(priority); 
-    t[threadNum]->SetRemainingBurstTime(burst_time);
-    t[threadNum]->SetRRTime(0);
-    t[threadNum]->SetRunTime(0);
-    t[threadNum]->SetWaitTime(0);
+    t[threadNum]->setPriority(priority); 
+    t[threadNum]->setRemainingBurstTime(burst_time);
+    t[threadNum]->setRRTime(0);
+    t[threadNum]->setRunTime(0);
+    t[threadNum]->setWaitTime(0);
     t[threadNum]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[threadNum]);
     //<TODO>
 

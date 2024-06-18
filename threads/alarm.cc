@@ -12,6 +12,8 @@
 #include "alarm.h"
 #include "main.h"
 
+#define AGING_THRESHOLD 200
+
 //----------------------------------------------------------------------
 // Alarm::Alarm
 //      Initialize a software alarm clock.  Start up a timer device
@@ -58,31 +60,30 @@ Alarm::CallBack()
     // In each 100 ticks,     
 
     // 1. Update Priority
-    if (currentTime % 100 == 0) {
-        kernel->scheduler->UpdatePriority();
-    }
+    kernel->scheduler->UpdatePriority();
+
 
     // 2. Update RunTime & RRTime
     Thread *currentThread = kernel->currentThread;
-    currentThread->SetRunTime(currentThread->GetRunTime() + 1);
-    currentThread->SetRRTime(currentThread->GetRRTime() + 1);
+    currentThread->setRunTime(currentThread->getRunTime() + 100);
+    currentThread->setRRTime(currentThread->getRRTime() + 100);
 
     // 3. Check Round Robin
-    if (currentThread->GetRRTime() >= 400) {
-        currentThread->SetRRTime(0);
-        if (status == SystemMode) {
+    if (currentThread->getPriority() < 50) {
+        if (currentThread->getRRTime() >= 200) {
+            currentThread->setRRTime(0);
             kernel->interrupt->YieldOnReturn();
         }
     }
 
     //<TODO>
     
-    if (status == IdleMode) {    // is it time to quit?
-        if (!interrupt->AnyFutureInterrupts()) {
-            timer->Disable(); // turn off the timer
-        }
-    } else {         // there's someone to preempt
-       interrupt->YieldOnReturn();
-    }
+    // if (status == IdleMode) {    // is it time to quit?
+    //     if (!interrupt->AnyFutureInterrupts()) {
+    //         timer->Disable(); // turn off the timer
+    //     }
+    // } else {         // there's someone to preempt
+    //    interrupt->YieldOnReturn();
+    // }
 }
 
