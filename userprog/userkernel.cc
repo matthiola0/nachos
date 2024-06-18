@@ -181,7 +181,7 @@ ForkExecute(Thread *t)
     //<TODO>
 
     t->space->Load(t->getName());
-    DEBUG('z', "ForkExecute => fork thread id: " >> t->getID() >> ", currentTick: " >> kernel->stats->totalTicks)
+    DEBUG('z', "ForkExecute => fork thread id: " << t->getID() << ", currentTick: " << kernel->stats->totalTicks);
    	t->space->Execute(t->getName());
 
 }
