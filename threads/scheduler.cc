@@ -93,7 +93,7 @@ Scheduler::ReadyToRun (Thread *thread)
     // readyList->Append(thread);
     if (thread->GetPriority() >= 100) {
         L1ReadyQueue->Insert(thread);
-        DEBUG(dbgThread, "[InsertToQueue] Tick [" << stats->totalTicks << "]: Thread [" 
+        DEBUG("z", "[InsertToQueue] Tick [" << stats->totalTicks << "]: Thread [" 
           << thread->getID() << "] is inserted into queue L1 ready queue");
 
         Thread *currentThread = kernel->currentThread;
@@ -102,11 +102,11 @@ Scheduler::ReadyToRun (Thread *thread)
 
     } else if (thread->GetPriority() >= 50) {
         L2ReadyQueue->Insert(thread);
-        DEBUG(dbgThread, "[InsertToQueue] Tick [" << stats->totalTicks << "]: Thread [" 
+        DEBUG("z", "[InsertToQueue] Tick [" << stats->totalTicks << "]: Thread [" 
           << thread->getID() << "] is inserted into queue L2 ready queue");
     } else {
         L3ReadyQueue->Append(thread);
-        DEBUG(dbgThread, "[InsertToQueue] Tick [" << stats->totalTicks << "]: Thread [" 
+        DEBUG("z", "[InsertToQueue] Tick [" << stats->totalTicks << "]: Thread [" 
           << thread->getID() << "] is inserted into queue L3 ready queue");
     }
 
