@@ -223,7 +223,7 @@ Thread::Yield ()
     if (RemainingBurstTime < 0) {
         RemainingBurstTime = 0;
     }
-    DEBUG('z', "[UpdateRemainingBurstTime] Tick [" << kernel->stats->totalTicks 
+    DEBUG(dbgMLFQ, "[UpdateRemainingBurstTime] Tick [" << kernel->stats->totalTicks 
           << "]: Thread [" << getID() 
           << "] update remaining burst time, from: [" << oldRemainingBurstTime
           << "] to [" << RemainingBurstTime << "]");
@@ -286,10 +286,10 @@ Thread::Sleep (bool finishing)
         if(RRTime !=0){
             int old = this->getRemainingBurstTime();
             this->setRemainingBurstTime(old - RRTime);
-            DEBUG('z', "[UpdateRemainingBurstTime] Tick [" << kernel->stats->totalTicks << "]: Thread [" << this->getID() << "] update remaining burst time, from: [" << old << "] - [" << RRTime << "], to [" << old << "]");
+            DEBUG(dbgMLFQ, "[UpdateRemainingBurstTime] Tick [" << kernel->stats->totalTicks << "]: Thread [" << this->getID() << "] update remaining burst time, from: [" << old << "] - [" << RRTime << "], to [" << old << "]");
             this->setRRTime(0);
         }
-        DEBUG('z',"[ContextSwitch] Tick [" << kernel->stats->totalTicks << "]: Thread [" << nextThread->getID() << "] is now selected for execution, thread [" << this->getID() << "] is replaced, and it has executed [" << this->getRunTime() << "] ticks");
+        DEBUG(dbgMLFQ,"[ContextSwitch] Tick [" << kernel->stats->totalTicks << "]: Thread [" << nextThread->getID() << "] is now selected for execution, thread [" << this->getID() << "] is replaced, and it has executed [" << this->getRunTime() << "] ticks");
         kernel->scheduler->Run(nextThread, finishing);
     }
     //<TODO>

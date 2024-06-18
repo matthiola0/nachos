@@ -31,7 +31,7 @@ const char dbgNet = 'n'; 		// network emulation (NETWORK)
 
 
 //<REPORT>
-const char dbgMLFQ = 'z';
+const char dbgMLFQ = dbgMLFQ;
 //<REPOrT>
 
 class Debug {
