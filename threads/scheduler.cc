@@ -131,15 +131,22 @@ Scheduler::FindNextToRun ()
     //<TODO>
     // a.k.a. Find Next (Thread in ReadyQueue) to Run
     //<TODO>
+    int QueueNum;
+    Thread * thread;
     if (!L1ReadyQueue->IsEmpty()) {
-        return L1ReadyQueue->RemoveFront();
+        QueueNum=1;
+        thread=L1ReadyQueue->RemoveFront();
     } else if (!L2ReadyQueue->IsEmpty()) {
-        return L2ReadyQueue->RemoveFront();
+        QueueNum=2;
+        thread=L2ReadyQueue->RemoveFront();
     } else if (!L3ReadyQueue->IsEmpty()) {
-        return L3ReadyQueue->RemoveFront();
+        QueueNum=3;
+        thread=L3ReadyQueue->RemoveFront();
     } else {
         return NULL;
     }
+    DEBUG('z', "[RemoveFromQueue] Tick [" << kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] is removed from queue "<<QueueNum);
+    return thread;
 }
 
 //----------------------------------------------------------------------
@@ -295,7 +302,7 @@ Scheduler::UpdatePriority()
             int newPriority = min(oldPriority + 10, 149);
             thread->setPriority(newPriority);
             
-            DEBUG('z', "[UpdatePriority] Tick [" << newPriority << "]: Thread [" << thread->getID() << "] changes its priority from [" << oldPriority << "] to [" << thread->getPriority() << "]");
+            DEBUG('z', "[UpdatePriority] Tick [" << kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] changes its priority from [" << oldPriority << "] to [" << newPriority << "]");
         }
     }
     delete iter;
@@ -309,11 +316,11 @@ Scheduler::UpdatePriority()
             int oldPriority = thread->getPriority();
             int newPriority = min(oldPriority + 10, 149);
             thread->setPriority(newPriority);
-            DEBUG('z', "[UpdatePriority] Tick [" << newPriority << "]: Thread [" << thread->getID() << "] changes its priority from [" << oldPriority << "] to [" << thread->getPriority() << "]");
+            DEBUG('z', "[UpdatePriority] Tick [" << kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] changes its priority from [" << oldPriority << "] to [" << newPriority << "]");
 
             if (thread->getPriority() >= 100) {
                 L2ReadyQueue->Remove(thread);
-                DEBUG('z', "[RemoveFromQueue] Tick [" << newPriority << "]: Thread [" << thread->getID() << "] is removed from queue L2");
+                DEBUG('z', "[RemoveFromQueue] Tick [" << kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] is removed from queue L2");
                 ReadyToRun(thread);
             }
         }
@@ -329,11 +336,11 @@ Scheduler::UpdatePriority()
             int oldPriority = thread->getPriority();
             int newPriority = min(oldPriority + 10, 149);
             thread->setPriority(newPriority);
-            DEBUG('z', "[UpdatePriority] Tick [" << newPriority << "]: Thread [" << thread->getID() << "] changes its priority from [" << oldPriority << "] to [" << thread->getPriority() << "]");
+            DEBUG('z', "[UpdatePriority] Tick [" << kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] changes its priority from [" << oldPriority << "] to [" << newPriority << "]");
 
             if (thread->getPriority() >= 50) {
                 L3ReadyQueue->Remove(thread);
-                DEBUG('z', "[RemoveFromQueue] Tick [" << newPriority << "]: Thread [" << thread->getID() << "] is removed from queue L3");
+                DEBUG('z', "[RemoveFromQueue] Tick [" << kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] is removed from queue L3");
                 ReadyToRun(thread);
             }
         }
