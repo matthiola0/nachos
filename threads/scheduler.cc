@@ -91,7 +91,6 @@ Scheduler::ReadyToRun (Thread *thread)
     // When putting a new thread into L1 ReadyQueue, you need to check whether preemption or not.
     //<TODO>
     // readyList->Append(thread);
-    DEBUG('z', "[InsertToQueue] Thread[" << thread->getID() << "] priority -> " << thread->getPriority());
     if (thread->getPriority() >= 100) {
         L1ReadyQueue->Insert(thread);
 
@@ -105,7 +104,7 @@ Scheduler::ReadyToRun (Thread *thread)
     }
     DEBUG('z', "[InsertToQueue] Tick [" << kernel->stats->totalTicks 
         << "]: Thread [" << thread->getID() 
-        << "] is inserted into queue L[" << (thread->getPriority() >= 100 ? 1 : (thread->getPriority() >= 50 ? 2 : 3)) << "]");
+        << "] is inserted into queue L" << (thread->getPriority() >= 100 ? 1 : (thread->getPriority() >= 50 ? 2 : 3)));
     thread->setStatus(READY);
     thread->setWaitTime(0);
 }
