@@ -301,7 +301,6 @@ Scheduler::UpdatePriority()
     }
     delete iter;
 
-    ListIterator<Thread *> *iter;
     // L2 
     for (iter = new ListIterator<Thread *>(L2ReadyQueue); !iter->IsDone(); iter->Next()) {
         Thread *thread = iter->Item();
@@ -322,7 +321,6 @@ Scheduler::UpdatePriority()
     }
     delete iter;
 
-    ListIterator<Thread *> *iter;
     // 3
     for (iter = new ListIterator<Thread *>(L3ReadyQueue); !iter->IsDone(); iter->Next()) {
         Thread *thread = iter->Item();
