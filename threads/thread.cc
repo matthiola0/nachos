@@ -231,10 +231,10 @@ Thread::Yield ()
     nextThread = kernel->scheduler->FindNextToRun();
     if (nextThread != NULL ) {
         kernel->scheduler->ReadyToRun(this);
-        // if (RemainingBurstTime > 0) 
+        if (RemainingBurstTime > 0) 
             kernel->scheduler->Run(nextThread, false);
-        // else
-        //     kernel->scheduler->Run(nextThread, true);
+        else
+            kernel->scheduler->Run(nextThread, true);
     }
 
     //<TODO>
