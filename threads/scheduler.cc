@@ -145,7 +145,7 @@ Scheduler::FindNextToRun ()
     } else {
         return NULL;
     }
-    DEBUG(dbgMLFQ, "[RemoveFromQueue] Tick [" << kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] is removed from queue "<<QueueNum);
+    DEBUG(dbgMLFQ, "[RemoveFromQueue] Tick [" << kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] is removed from queue L"<< QueueNum);
     return thread;
 }
 
