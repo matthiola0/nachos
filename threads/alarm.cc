@@ -78,12 +78,12 @@ Alarm::CallBack()
 
     //<TODO>
     
-    // if (status == IdleMode) {    // is it time to quit?
-    //     if (!interrupt->AnyFutureInterrupts()) {
-    //         timer->Disable(); // turn off the timer
-    //     }
-    // } else {         // there's someone to preempt
-    //    interrupt->YieldOnReturn();
-    // }
+    if (status == IdleMode) {    // is it time to quit?
+        if (!interrupt->AnyFutureInterrupts()) {
+            timer->Disable(); // turn off the timer
+        }
+    } else {         // there's someone to preempt
+       interrupt->YieldOnReturn();
+    }
 }
 
